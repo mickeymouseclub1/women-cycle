@@ -16,20 +16,38 @@ const MoodCalculator = () => {
   const [calendarDate, setCalendarDate] = useState(new Date());
   const [activeTab, setActiveTab] = useState('scenarios');
 
-  const calculateMood = () => {
-    if (!inputDate) return;
-    
-    setLoading(true);
-    setTimeout(() => {
-      const mockResults = mockMoodData.calculateAllScenarios(inputDate);
-      const analysis = mockMoodData.analyzeAllScenarios(mockResults);
-      const calendarData = mockMoodData.generateCalendarData(inputDate);
-      
-      setResults({
-        ...mockResults,
-        analysis,
-        calendarData
-      });
+ const API_URL = process.env.REACT_APP_API_URL || "https://women-mood-5.onrender.com";
+
+const calculateMood = async () => {
+  if (!inputDate) return;
+
+  setLoading(true);
+  try {
+    const response = await fetch(`${API_URL}/analyze`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ date: inputDate }),
+    });
+
+    if (!response.ok) {
+      console.error("Server error:", response.statusText);
+      alert("Error from server: " + response.status);
+      return;
+    }
+
+    const data = await response.json();
+
+    setResults(data);
+    setSelectedScenario(0);
+    setCalendarDate(new Date(inputDate));
+  } catch (err) {
+    console.error("Network error:", err);
+    alert("Network error: " + err.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
       setLoading(false);
       setSelectedScenario(0);
       setCalendarDate(new Date(inputDate));
