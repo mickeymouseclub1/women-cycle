@@ -6,7 +6,7 @@ import { Label } from './ui/label';
 import { Badge } from './ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Calendar, Heart, TrendingUp, AlertCircle, CalendarDays, Users, BarChart3, ChevronLeft, ChevronRight, Target } from 'lucide-react';
-import { mockMoodData } from '../utils/mockData';
+
 
 const MoodCalculator = () => {
   const [inputDate, setInputDate] = useState('');
@@ -48,12 +48,7 @@ const calculateMood = async () => {
   }
 };
 
-      setLoading(false);
-      setSelectedScenario(0);
-      setCalendarDate(new Date(inputDate));
-    }, 1000);
-  };
-
+      
   const getMoodColor = (mood) => {
     if (mood >= 75) return 'bg-green-500/20 text-green-400 border-green-500/30';
     if (mood >= 60) return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
